@@ -1,3 +1,6 @@
+server:
+  port: ${PORT:${SERVER_PORT:0}}
+
 spring:
   datasource:
     driverClassName: org.h2.Driver
@@ -19,8 +22,18 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8090/eureka
   instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+    metadata-map:
+      instanceId: ${spring.application.name}:${random.uuid}
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    home-page-url-path: /
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 jwt:
   secret: secret
-
